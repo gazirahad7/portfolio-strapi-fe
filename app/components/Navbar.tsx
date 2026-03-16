@@ -7,7 +7,7 @@ export default function Navbar({ logoUrl }: { logoUrl?: string }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className=" max-w-7xl mx-auto w-full    py-4 flex items-center justify-between sticky top-0 z-50 ">
+    <header className=" max-w-7xl mx-auto w-full px-6 md:px-10  py-4 flex items-center justify-between sticky top-0 z-50 ">
       {/* Logo */}
       <a href="#" className="flex items-center gap-2 shrink-0">
         {/* W icon */}
