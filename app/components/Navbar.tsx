@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
-export default function Navbar() {
+export default function Navbar({ logoUrl }: { logoUrl?: string }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -10,25 +11,11 @@ export default function Navbar() {
       {/* Logo */}
       <a href="#" className="flex items-center gap-2 shrink-0">
         {/* W icon */}
-        <svg
-          width="36"
-          height="28"
-          viewBox="0 0 36 28"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M0 0L6 28L12 10L18 28L24 10L30 28L36 0H30L26 16L22 0H14L10 16L6 0H0Z"
-            fill="#22C55E"
-          />
-        </svg>
-        <span className="text-gray-900 font-semibold text-lg tracking-tight">
-          webermelon
-        </span>
+        {logoUrl && <img src={logoUrl} alt="Logo" />}
       </a>
 
       {/* Desktop Nav Menu */}
-      <nav className="hidden md:flex items-center gap-1 bg-gray-100 rounded-full px-2 py-1.5">
+      <nav className="hidden md:flex items-center gap-1 bg-[#D7F7E9] rounded-full px-2 py-1.5">
         {["Home", "About", "Services", "Portfolio", "Contact"].map((item) => (
           <a
             key={item}
