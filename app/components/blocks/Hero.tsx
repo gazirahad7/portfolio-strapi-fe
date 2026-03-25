@@ -1,11 +1,11 @@
-"use client";
-
 import Image from "next/image";
+import { getMediaUrl, type HeroBlock } from "../../lib/strapi";
 
-export default function Hero({ data }: { data: any }) {
-  console.log("hero img", data);
-
+export default function Hero({ data }: { data?: HeroBlock }) {
   const { BookingCta, ContactCta } = data || {};
+  const heroImageUrl =
+    getMediaUrl(data?.HeroImage?.url) ?? "/fallback-image.jpg";
+
   return (
     <section className="w-full min-h-[calc(100vh-72px)]  flex items-center px-6 md:px-10 py-12 md:py-16">
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -60,12 +60,8 @@ export default function Hero({ data }: { data: any }) {
         {/* Right Column — Photo Grid */}
         <div className="relative ">
           <Image
-            src={
-              process.env.STRAPI_URL && data?.HeroImage?.url
-                ? `${process.env.STRAPI_URL}${data.HeroImage.url}`
-                : "/fallback-image.jpg"
-            }
-            alt={"Hero Image"}
+            src={heroImageUrl}
+            alt={data?.HeroImage?.alternativeText || "Hero Image"}
             className="w-full h-full object-cover rounded-2xl"
             width={600}
             height={400}

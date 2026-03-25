@@ -1,28 +1,11 @@
 import Hero from "./components/blocks/Hero";
 import Navbar from "./components/Navbar";
-import { getGlobal, getHomepage, getLogoUrl } from "./lib/strapi";
+import { getGlobal, getHeroBlock, getHomepage, getLogoUrl } from "./lib/strapi";
 
 export default async function Home() {
-  const data = await getHomepage();
-
-  const globalData = await getGlobal();
-
-  //console.log(data);
-
-  const hero = data.blocks[0];
-
-  //console.log("data", footerData?.Footer?.Locations);
-
-  //console.log("footer", footerData?.Footer);
-
-  console.log(globalData);
-  console.log("ggg", globalData);
-  // const logoData = globalData.Options.find(
-  //   (option: any) => option.__component === 'elements.logo'
-  // );
-  // console.log("Logo Data:", logoData);
-  const logoUrl = getLogoUrl(globalData.Options);
-  console.log("Logo URL:", logoUrl);
+  const [data, globalData] = await Promise.all([getHomepage(), getGlobal()]);
+  const hero = getHeroBlock(data.blocks);
+  const logoUrl = getLogoUrl(globalData.Options ?? []);
 
   return (
     <main className="min-h-screen bg-[#f0faf3]">
