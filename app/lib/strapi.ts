@@ -104,7 +104,20 @@ export interface FooterLinkItem {
   Target?: boolean;
   target?: boolean;
   Platform?: string;
-  Icon?: string;
+  Icon?:
+    | StrapiImage
+    | {
+        url?: string;
+        alternativeText?: string;
+      }
+    | {
+        data?: {
+          attributes?: {
+            url?: string;
+            alternativeText?: string;
+          };
+        };
+      };
 }
 
 export interface FooterData {

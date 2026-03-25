@@ -61,6 +61,45 @@ function getHostLabel(href: string): string {
   }
 }
 
+function getPartnerIconUrl(item: FooterLinkItem): string | undefined {
+  const icon = item.Icon;
+  if (!icon || typeof icon !== "object") return undefined;
+
+  const maybeIcon = icon as {
+    url?: string;
+    data?: {
+      attributes?: {
+        url?: string;
+      };
+    };
+  };
+
+  return getMediaUrl(maybeIcon.url || maybeIcon.data?.attributes?.url);
+}
+
+function getPartnerIconAlt(
+  item: FooterLinkItem,
+  fallbackLabel: string,
+): string {
+  const icon = item.Icon;
+  if (!icon || typeof icon !== "object") return `${fallbackLabel} icon`;
+
+  const maybeIcon = icon as {
+    alternativeText?: string;
+    data?: {
+      attributes?: {
+        alternativeText?: string;
+      };
+    };
+  };
+
+  return (
+    maybeIcon.alternativeText ||
+    maybeIcon.data?.attributes?.alternativeText ||
+    `${fallbackLabel} icon`
+  );
+}
+
 function SocialIcon({ type }: { type: string }) {
   if (type === "linkedin") {
     return (
@@ -162,12 +201,9 @@ function Footer({ data }: { data?: FooterData }) {
                 href={getHref(contactLink)}
                 target={getTarget(contactLink) ? "_blank" : undefined}
                 rel={getTarget(contactLink) ? "noopener noreferrer" : undefined}
-                className="inline-flex items-center gap-2 rounded-md bg-[#9be7b9] px-5 py-2 text-sm font-medium text-[#033829] transition hover:bg-[#b7f2cf]"
+                className="inline-flex items-center gap-2 rounded-full bg-[#9be7b9] px-5 py-2 text-sm font-medium text-[#033829] transition hover:bg-[#b7f2cf]"
               >
                 {getLabel(contactLink)}
-                <span aria-hidden className="text-base leading-none">
-                  &gt;
-                </span>
               </a>
             )}
           </div>
@@ -217,16 +253,25 @@ function Footer({ data }: { data?: FooterData }) {
                 if (!href) return null;
 
                 const label = getLabel(item) || getHostLabel(href);
+                const iconUrl = getPartnerIconUrl(item);
+                if (!iconUrl) return null;
 
                 return (
                   <li key={`${href}-${index}`}>
                     <a
                       href={href}
-                      target={getTarget(item) ? "_blank" : "_blank"}
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center rounded-full border border-[#3ea67b] px-4 py-1.5 text-base font-semibold text-[#f6fff9] transition hover:bg-[#0d5e41]"
+                      target={getTarget(item) ? "_blank" : undefined}
+                      rel={getTarget(item) ? "noopener noreferrer" : undefined}
+                      aria-label={label}
+                      className="inline-flex items-center  rounded-full   p-2.5 transition hover:bg-[#0d5e41]"
                     >
-                      {label}
+                      <Image
+                        src={iconUrl}
+                        alt={getPartnerIconAlt(item, label)}
+                        width={200}
+                        height={50}
+                        className="h-[50px] w-[200px]  object-contain"
+                      />
                     </a>
                   </li>
                 );
@@ -243,7 +288,7 @@ function Footer({ data }: { data?: FooterData }) {
         </div>
 
         {data?.Locations && data.Locations.length > 0 && (
-          <div className="relative z-10 -mt-10 rounded-2xl border border-[#1e6e4f] bg-[#0b4a34]/90 p-6 shadow-[0_20px_40px_rgba(0,0,0,0.25)] backdrop-blur md:-mt-12 md:p-8">
+          <div className="relative z-10 -mt-4 rounded-2xl border border-[#1e6e4f] bg-[#0b4a34]/90 p-6 shadow-[0_20px_40px_rgba(0,0,0,0.25)] backdrop-blur md:-mt-12 md:p-8">
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {data.Locations.map((item) => (
                 <article key={item.id} className="space-y-2">
