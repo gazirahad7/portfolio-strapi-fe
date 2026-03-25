@@ -80,6 +80,53 @@ export interface StrapiImage {
   alternativeText?: string;
 }
 
+export interface FooterLocation {
+  id: number;
+  Name?: string;
+  LocationDetails?: string;
+}
+
+export interface FooterResource {
+  id: number;
+  Tag?: string;
+}
+
+export interface FooterLinkItem {
+  id?: number;
+  Label?: string;
+  Text?: string;
+  Name?: string;
+  Title?: string;
+  Tag?: string;
+  Url?: string;
+  href?: string;
+  Link?: string;
+  Target?: boolean;
+  target?: boolean;
+  Platform?: string;
+  Icon?: string;
+}
+
+export interface FooterData {
+  id: number;
+  quote?: string;
+  copyright?: string;
+  footerLogo?: StrapiImage;
+  Locations?: FooterLocation[];
+  QuickLinks?: {
+    id: number;
+    Links?: FooterLinkItem[];
+    Items?: FooterLinkItem[];
+  };
+  Resources?: FooterResource[];
+  SocialLinks?: {
+    id: number;
+    Links?: FooterLinkItem[];
+    Items?: FooterLinkItem[];
+  };
+  Partner?: FooterLinkItem[];
+}
+
 interface HeroCta {
   href?: string;
   Text?: string;
@@ -133,6 +180,7 @@ interface LogoOption {
 
 interface GlobalData {
   Options: LogoOption[];
+  Footer?: FooterData;
 }
 
 export function getMediaUrl(url?: string): string | undefined {
@@ -186,6 +234,9 @@ export async function getGlobal() {
               populate: "*",
             },
             Partner: {
+              populate: "*",
+            },
+            SocialLinks: {
               populate: "*",
             },
           },
